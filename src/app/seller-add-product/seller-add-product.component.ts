@@ -1,7 +1,10 @@
+// 
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../services/product.service';
 import { Product } from 'src/models/product';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-seller-add-product',
@@ -10,10 +13,15 @@ import { Product } from 'src/models/product';
 })
 export class SellerAddProductComponent implements OnInit {
   sellerForm: FormGroup;
+  user:any=''
+
+  currentUserId!: number;
+  sellerDetail:number | undefined
 
   constructor(
     private fb: FormBuilder,
-    private productService: ProductService
+    private productService: ProductService,
+    private dataService:DataService
   ) {
     this.sellerForm = this.fb.group({
       name: ['', Validators.required],
@@ -48,26 +56,44 @@ export class SellerAddProductComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.user = this.dataService.getUserFromLocalStorage();
+    this.currentUserId = parseInt(this.user.customer_id);
+    console.log(this.currentUserId, 'current')
+   }
 
   addProduct(): void {
     if (this.sellerForm.valid) {
-      const data: Product = this.sellerForm.value;
-      this.productService.createProduct(data).subscribe(
-        (res) => {
+      const formData = new FormData();
+      const formValues = this.sellerForm.getRawValue();
+   
+
+
+      Object.keys(formValues).forEach(key => {
+        formData.append(key, formValues[key]);
+      });
+      formData.set('DisplayPriority', '1');
+      formData.set('alternate_name', formValues['name']);
+      formData.set('SellerDetail', '15'); // ye id change krlo apne hisab se localstorage se nikal k bhi daal sakte ho
+      formData.set('ModelName', formValues['name']);
+      formData.set('product_code', formValues['name']);
+
+      this.productService.createProduct(formData).subscribe(
+        (res: any) => {
           if (res && res['status'] === 200) {
             console.log('Product added successfully');
           } else {
             console.log('Failed to add product');
           }
         },
-        (error) => {
+        (error: any) => {
           console.error('Error adding product:', error);
         }
       );
-      console.log('Submitted Data:', data);
+      console.log('Submitted Data:', formValues);
     } else {
       console.log('Form is invalid');
     }
   }
+
 }

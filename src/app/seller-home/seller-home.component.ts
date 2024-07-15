@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductService } from 'src/app/services/product.service'; // Adjust the path as necessary
+import { Paging } from 'src/models/paging'; // Adjust the path as necessary
 
 @Component({
   selector: 'app-seller-home',
@@ -7,9 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SellerHomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
+
   }
 
 }

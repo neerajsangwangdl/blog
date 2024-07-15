@@ -13,6 +13,8 @@ import { HttpApiService } from './services/http.service';
 import { SignUpServiceService } from './services/sign-up-service.service';
 import { SellerHomeComponent } from './seller-home/seller-home.component';
 import { SellerAddProductComponent } from './seller-add-product/seller-add-product.component';
+import { ProductListComponent } from './product-list/product-list.component';
+import { ProductCardComponent } from './product-card/product-card.component';
  
 
 
@@ -24,7 +26,10 @@ import { SellerAddProductComponent } from './seller-add-product/seller-add-produ
     HomeComponent,
     SellerAuthComponent,
     SellerHomeComponent,
-    SellerAddProductComponent, 
+    SellerAddProductComponent,
+    ProductListComponent,
+    ProductCardComponent,
+  
    
   ],
   imports: [
